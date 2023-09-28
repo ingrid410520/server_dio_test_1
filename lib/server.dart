@@ -14,7 +14,9 @@ class MyServer {
 
   Future<String> postReq(String strID, String strPW) async {
     Dio vDio = new Dio();
-    Response vRes = await vDio.post(_API);
+    //Response vRes = await vDio.post(_API, data: { "_id" : strID, "_pw" : strPW});
+    Response vRes = await vDio.post(_API, queryParameters: { "_id" : strID, "_pw" : strPW});
+    //Response vRes = await vDio.post(_API);
     print(vRes.data.toString());
 
     return vRes.data.toString();

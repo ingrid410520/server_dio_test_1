@@ -35,8 +35,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String _responseGet = "None";
   String _responsePost = "None";
-  TextEditingController _id = TextEditingController(text:"aaa");
-  TextEditingController _pw = TextEditingController(text:"123");
+  TextEditingController _id = TextEditingController(text: "aaa");
+  TextEditingController _pw = TextEditingController(text: "123");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             http_get(),
             http_post(context),
-
             FloatingActionButton(child: Text("put"), onPressed: () {}),
           ],
         ),
@@ -60,50 +60,57 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Container http_post(BuildContext context) {
     return Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width*0.5,
-                  child: Column(
-                    children: [
-                      TextField(
-                        decoration: InputDecoration(label: Text("ID")),
-                        controller: _id,
-                      ),
-                      TextField(
-                        decoration: InputDecoration(label: Text("Password")),
-                        controller: _pw,
-                      ),
-                    ],
-                  ),
-                ),
-                FloatingActionButton(child: Text("post"), onPressed: () async {
-                  final vResult = await server.postReq(_id.text, _pw.text) ;
-                  setState(() {
-                    _responsePost = vResult.toString();
-                  });
-                }),
-                AutoSizeText("Http_Post \n" + _responsePost),
-              ],
-            ),
-          );
+      color: Colors.grey,
+      width: MediaQuery.of(context).size.width * 0.5,
+      height: MediaQuery.of(context).size.height * 0.25,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              TextField(
+                decoration: InputDecoration(label: Text("ID")),
+                controller: _id,
+              ),
+              TextField(
+                decoration: InputDecoration(label: Text("Password")),
+                controller: _pw,
+              ),
+            ],
+          ),
+          FloatingActionButton(
+              child: Text("post"),
+              onPressed: () async {
+                final vResult = await server.postReq(_id.text, _pw.text);
+                setState(() {
+                  _responsePost = vResult.toString();
+                });
+              }),
+          AutoSizeText("Http_Post \n" + _responsePost, maxLines: 3, ),
+        ],
+      ),
+    );
   }
 
   Container http_get() {
     return Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                FloatingActionButton(child: Text("get"), onPressed: () async {
-                  final vResult = await server.getReq() ;
-                  setState(() {
-                    _responseGet = vResult.toString();
-                  });
-                }),
-                AutoSizeText("Http_get \n" + _responseGet,maxLines: 4),
-              ],
-            ),
-          );
+      color: Colors.grey,
+      width: MediaQuery.of(context).size.width * 0.5,
+      height: MediaQuery.of(context).size.height * 0.25,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FloatingActionButton(
+              child: Text("get"),
+              onPressed: () async {
+                final vResult = await server.getReq();
+                setState(() {
+                  _responseGet = vResult.toString();
+                });
+              }),
+          AutoSizeText("Http_get \n" + _responseGet, maxLines: 4),
+        ],
+      ),
+    );
   }
 }
