@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 
-// const _API = "https://jsonplaceholder.typicode.com/posts/1";
+//const _API = "https://jsonplaceholder.typicode.com/posts/1";
 const _API = "http://localhost:5092/WeatherForecast";
+
 
 class MyServer {
   Future<String> getReq() async {
