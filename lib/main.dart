@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -33,10 +34,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _responseGet = "None";
-  String _responsePost = "None";
+  String _response = "None";
+  TextEditingController _http =
+      TextEditingController(text: "http://localhost:");
   TextEditingController _id = TextEditingController(text: "aaa");
   TextEditingController _pw = TextEditingController(text: "123");
+  TextEditingController _score = TextEditingController(text: "0");
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +52,76 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            http_get(),
+            build_SetHttp(context),
             http_post(context),
-            FloatingActionButton(child: Text("put"), onPressed: () {}),
+            build_SendScore(context),
+            build_ShowResponse(context),
+
+            //FloatingActionButton(child: Text("put"), onPressed: () {}),
           ],
         ),
+      ),
+    );
+  }
+
+  Container build_ShowResponse(BuildContext context) {
+    return Container(
+      color: Colors.grey,
+      width: MediaQuery.of(context).size.width * 0.5,
+      height: MediaQuery.of(context).size.height * 0.15,
+      child: AutoSizeText("response \n" + _response, maxLines: 4),
+    );
+  }
+
+  Container build_SendScore(BuildContext context) {
+    return Container(
+      color: Colors.grey,
+      width: MediaQuery.of(context).size.width * 0.5,
+      height: MediaQuery.of(context).size.height * 0.15,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          TextField(
+            decoration: InputDecoration(label: Text("Score")),
+            controller: _score,
+          ),
+          ElevatedButton.icon(
+            label: Text("Send"),
+            icon: Icon(Icons.send),
+            onPressed: () async {
+              // final vResult = await server.postReq(_score.text);
+              // setState(() {
+              //   _response = vResult.toString();
+              // });
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Container build_SetHttp(BuildContext context) {
+    return Container(
+      color: Colors.grey,
+      width: MediaQuery.of(context).size.width * 0.5,
+      height: MediaQuery.of(context).size.height * 0.15,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          TextField(
+            decoration: InputDecoration(label: Text("HTTP")),
+            controller: _http,
+          ),
+          ElevatedButton.icon(
+            label: Text("Save"),
+            icon: Icon(Icons.http),
+            onPressed: () {
+              setState(() {
+                server.SetHttp(_http.text);
+              });
+            },
+          )
+        ],
       ),
     );
   }
@@ -83,10 +151,10 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () async {
                 final vResult = await server.postReq(_id.text, _pw.text);
                 setState(() {
-                  _responsePost = vResult.toString();
+                  _response = vResult.toString();
                 });
               }),
-          AutoSizeText("Http_Post \n" + _responsePost, maxLines: 3, ),
+          //AutoSizeText("Http_Post \n" + _response, maxLines: 3),
         ],
       ),
     );
@@ -103,12 +171,10 @@ class _MyHomePageState extends State<MyHomePage> {
           FloatingActionButton(
               child: Text("get"),
               onPressed: () async {
-                final vResult = await server.getReq();
-                setState(() {
-                  _responseGet = vResult.toString();
-                });
+                //final vResult = await server.getReq();
+                setState(() {});
               }),
-          AutoSizeText("Http_get \n" + _responseGet, maxLines: 4),
+          //AutoSizeText("Http_get \n" + _responseGet, maxLines: 4),
         ],
       ),
     );
